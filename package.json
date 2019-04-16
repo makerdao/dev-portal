@@ -1,0 +1,19 @@
+{
+  "name": "maker-dev-portal",
+  "version": "0.0.1",
+  "description": "The MakerDAO Developer Portal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/makerdao/dev-portal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/makerdao/dev-portal/issues"
+  },
+  "homepage": "https://github.com/makerdao/dev-portal#readme"
+}
