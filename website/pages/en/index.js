@@ -17,6 +17,8 @@ const { Card } = require('@makerdao/ui-components');
 
 class Index extends React.Component {
   render() {
+
+    console.log(JSON.stringify(this.props, null, 4))
     const {config: siteConfig, language = ''} = this.props;
     const {baseUrl} = siteConfig;
 
@@ -24,7 +26,6 @@ class Index extends React.Component {
       <div>
         <div className="mainContainer">
           <Card>
-            <p>Maker Cardkhkohkjh</p>
           </Card>
         </div>
       </div>
