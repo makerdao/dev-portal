@@ -13,7 +13,7 @@ const MarkdownBlock = CompLibrary.MarkdownBlock; /* Used to read markdown */
 const Container = CompLibrary.Container;
 const GridBlock = CompLibrary.GridBlock;
 
-const { Card } = require('@makerdao/ui-components');
+const { Card, Link } = require('@makerdao/ui-components');
 
 class Index extends React.Component {
   render() {
