@@ -1,10 +1,3 @@
-/**
- * Copyright (c) 2017-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 // See https://docusaurus.io/docs/site-config for all the possible
 // site configuration options.
 
@@ -41,9 +34,9 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     {doc: 'introduction', label: 'Documentation'},
-    // {page: 'education', label: 'Education'},
-    // {page: 'products', label: 'Products'},
-    // {page: 'community', label: 'Community'}
+    {page: 'education', label: 'Education'},
+    {page: 'products', label: 'Products'},
+    {page: 'community', label: 'Community'}
   ],
 
   // If you have users set above, you add it here:
@@ -103,6 +96,6 @@ const siteConfig = {
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
   //   repoUrl: 'https://github.com/facebook/test-site',
-};
+}
 
 module.exports = siteConfig;
