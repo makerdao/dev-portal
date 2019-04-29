@@ -1,25 +1,10 @@
 {
   "docs": {
-    "Getting Started": [
-      "introduction",
-      "glossary"
-    ],
-    "Smart Contracts": [
-      "sc_core",
-      "sc_collateral",
-      "sc_dai",
-      "sc_system_stabilizer",
-      "sc_oracles",
-      "sc_mkr",
-      "sc_governance",
-      "sc_rates"
-    ],
-    "Backend Services": [""],
-    "Keepers, Auctions & Oracles": [""],
-    "Dai.js": [""],
-    "Graphql": [""],
-    "DappHub": [""]
+    "Docusaurus": ["doc1"],
+    "First Category": ["doc2"],
+    "Second Category": ["doc3"]
   },
   "docs-other": {
+    "First Category": ["doc4", "doc5"]
   }
 }
