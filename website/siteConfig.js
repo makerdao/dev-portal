@@ -106,10 +106,9 @@ const siteConfig = {
     const html = renderToStaticMarkup(
       collected
     )
-
     const insertStylesAt = html.lastIndexOf('</body>')
     const tags = sheet.getStyleTags();
-    console.log(tags)
+
     return `
       <!DOCTYPE html>
       ${html.slice(0, insertStylesAt)}
