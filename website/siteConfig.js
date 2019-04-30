@@ -1,7 +1,8 @@
-// See https://docusaurus.io/docs/site-config for all the possible
-// site configuration options.
+const React = require('react')
+const ServerStyleSheet = require('styled-components').ServerStyleSheet
+const renderToStaticMarkup = require('react-dom/server').renderToStaticMarkup
 
-const { makerTeal, makerOrange, daiYellow, heading, linkBlue } = require("@makerdao/ui-components").themeLight.colors;
+const { makerTeal, makerOrange, daiYellow, heading, linkBlue } = require("@makerdao/ui-components-core").themeLight.colors;
 
 // List of projects/orgs using your project for the users page.
 const users = [
@@ -96,6 +97,27 @@ const siteConfig = {
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
   //   repoUrl: 'https://github.com/facebook/test-site',
+  renderToString: element => {
+    const sheet = new ServerStyleSheet()
+    const collected = sheet.collectStyles(
+      element
+    );
+
+    const html = renderToStaticMarkup(
+      collected
+    )
+
+    const insertStylesAt = html.lastIndexOf('</body>')
+    const tags = sheet.getStyleTags();
+    console.log(tags)
+    return `
+      <!DOCTYPE html>
+      ${html.slice(0, insertStylesAt)}
+      ${tags}
+      ${html.slice(insertStylesAt)}
+    `.trim()
+  },
+
 }
 
 module.exports = siteConfig;

@@ -9,10 +9,11 @@
     "rename-version": "docusaurus-rename-version"
   },
   "devDependencies": {
-    "docusaurus": "^1.8.1"
+    "@makerdao/docusaurus": "0.0.4"
   },
   "dependencies": {
-    "@makerdao/ui-components": "^1.0.0-alpha.31",
+    "@makerdao/ui-components-core": "^0.2.1",
+    "@makerdao/ui-components-footer": "^0.1.8",
     "styled-components": "^4.2.0"
   }
 }
