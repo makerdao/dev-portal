@@ -1,25 +1,18 @@
 {
   "docs": {
     "Getting Started": [
-      "introduction",
-      "glossary"
+      "getting-started/introduction"
     ],
     "Smart Contracts": [
-      "sc_core",
-      "sc_collateral",
-      "sc_dai",
-      "sc_system_stabilizer",
-      "sc_oracles",
-      "sc_mkr",
-      "sc_governance",
-      "sc_rates"
-    ],
-    "Backend Services": [""],
-    "Keepers, Auctions & Oracles": [""],
-    "Dai.js": [""],
-    "Graphql": [""],
-    "DappHub": [""]
-  },
-  "docs-other": {
+      "smart-contracts/sc_core",
+      "smart-contracts/sc_collateral",
+      "smart-contracts/sc_dai",
+      "smart-contracts/sc_system_stabilizer",
+      "smart-contracts/sc_oracles",
+      "smart-contracts/sc_mkr",
+      "smart-contracts/sc_governance",
+      "smart-contracts/sc_rates"
+    ]
   }
 }
+

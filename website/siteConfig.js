@@ -1,6 +1,7 @@
 const React = require('react')
 const ServerStyleSheet = require('styled-components').ServerStyleSheet
 const renderToStaticMarkup = require('react-dom/server').renderToStaticMarkup
+const fs = require('fs');
 
 const { makerTeal, makerOrange, daiYellow, heading, linkBlue } = require("@makerdao/ui-components-core").themeLight.colors;
 
@@ -35,11 +36,12 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     {doc: 'getting-started/introduction', label: 'Documentation'},
-    {page: 'education', label: 'Education'},
-    {page: 'products', label: 'Products'},
-    {page: 'community', label: 'Community'}
+    {doc: 'smart-contracts/sc_core', label: 'SM'},
+    {doc: 'getting-started/introduction', label: 'Developer'},
+    {doc: 'getting-started/introduction', label: 'Community'},
   ],
 
+  docPaths: JSON.parse(fs.readFileSync('sidebars.json')),
   // If you have users set above, you add it here:
   users,
 
