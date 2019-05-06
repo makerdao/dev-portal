@@ -1,7 +1,7 @@
 const React = require('react');
 const styled = require('styled-components').default;
 const { Box, Flex } = require('@makerdao/ui-components-core');
-const { Dropdown } = require('./Dropdown');
+const Dropdown = require('./Dropdown');
 
 const Logo = () => (
   <a href="/">
@@ -33,7 +33,10 @@ const NavDoc = ({ doc, label, paths }) => {
       pl='90px'
       key={label}
       display={["none", "none", "block"]}>
-      {label}
+      <Dropdown
+        label={ label }
+        routes={ routes }
+      />
     </Box>
   )
 }
@@ -74,7 +77,6 @@ class Navbar extends React.Component {
             {headerLinks.map(item => {
               if (item.language) 
                 return null;
-              
               switch(Object.keys(item)[0]) {
                 case 'doc':
                   return <NavDoc { ...item } paths={ docPaths }/>;
@@ -90,7 +92,6 @@ class Navbar extends React.Component {
               }
             })}
           </Box>
-
         </Flex>
       </Box>
     );

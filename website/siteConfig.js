@@ -36,7 +36,7 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     {doc: 'getting-started/introduction', label: 'Docs'},
-    {doc: 'smart-contracts/sc_core', label: 'Learn'},
+    {doc: 'learn/introduction', label: 'Learn'},
     {page: 'help', label: 'Products'},
     {href: 'https://blog.makerdao.com/', label: 'Community'}
   ],
