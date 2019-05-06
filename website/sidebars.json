@@ -1,6 +1,6 @@
 {
   "docs": {
-    "Getting Started": [
+    "Introduction": [
       "getting-started/introduction"
     ],
     "Smart Contracts": [
@@ -12,6 +12,15 @@
       "smart-contracts/sc_mkr",
       "smart-contracts/sc_governance",
       "smart-contracts/sc_rates"
+    ],
+    "Dai.js": [
+      "dai/Basic/cdp",
+      "dai/Basic/Maker"
+    ]
+  },
+  "learn": {
+    "Getting Started": [
+      "learn/introduction"
     ]
   }
 }

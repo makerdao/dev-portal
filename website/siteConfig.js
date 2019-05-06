@@ -35,10 +35,10 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    {doc: 'getting-started/introduction', label: 'Documentation'},
-    {doc: 'smart-contracts/sc_core', label: 'SM'},
-    {doc: 'getting-started/introduction', label: 'Developer'},
-    {doc: 'getting-started/introduction', label: 'Community'},
+    {doc: 'getting-started/introduction', label: 'Docs'},
+    {doc: 'smart-contracts/sc_core', label: 'Learn'},
+    {page: 'help', label: 'Products'},
+    {href: 'https://blog.makerdao.com/', label: 'Community'}
   ],
 
   docPaths: JSON.parse(fs.readFileSync('sidebars.json')),
