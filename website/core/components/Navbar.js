@@ -1,13 +1,7 @@
 const React = require('react');
 const styled = require('styled-components').default;
 const { Box, Flex } = require('@makerdao/ui-components-core');
-
-const Trigger = styled.span`
-  font-weight: 500;
-  cursor: pointer;
-  color: ${props => props.theme.header.linkHeaderColor};
-  font-size: 1.6rem;
-`;
+const { Dropdown } = require('./Dropdown');
 
 const Logo = () => (
   <a href="/">
@@ -24,23 +18,22 @@ const findTopLevelKey = ({ doc, paths }) =>
                   )).find(route => route === doc)
                   && topLevelKey)
 
+const getDropdownRoutes = ({ paths, tlk }) =>
+      Object.keys(paths[tlk])
+        .reduce((acc, label) => {
+          acc.push({ label, route: paths[tlk][label][0]});
+          return acc;
+        }, []);  
+
 const NavDoc = ({ doc, label, paths }) => { 
-  const topLevelKey = findTopLevelKey({ doc, paths });
-  const dropDownPaths = Object.keys(paths[topLevelKey]);
+  const tlk = findTopLevelKey({ doc, paths });
+  const routes = getDropdownRoutes({ paths, tlk })
   return (
     <Box
       pl='90px'
       key={label}
       display={["none", "none", "block"]}>
-      <Dropdown trigger={<Trigger>{label}</Trigger>}>
-        <DefaultDropdown>
-          {dropDownPaths.map((pathLabel, index) => (
-            <div key={index}>
-              {pathLabel}
-            </div>
-          ))}
-        </DefaultDropdown>
-      </Dropdown>
+      {label}
     </Box>
   )
 }
