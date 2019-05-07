@@ -18,9 +18,20 @@
       "dai/Basic/Maker"
     ]
   },
-  "learn": {
+  "education": {
     "Getting Started": [
       "learn/introduction"
+    ],
+    "Tutorials": [
+      "learn/tutorial"
+    ]
+  },
+  "community": {
+    "FAQ": [
+      "community/faq"
+    ],
+    "Events": [
+      "community/events"
     ]
   }
 }

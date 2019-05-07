@@ -1,7 +1,7 @@
 ---
-id: dai
-title: Exchange Service
-sidebar_label: Advanced
+id: cdp
+title: cdp
+sidebar_label: cdp
 ---
 
 # Summary

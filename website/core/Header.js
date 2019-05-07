@@ -5,12 +5,10 @@ const Navbar = require('./components/Navbar');
 class Header extends React.Component {
 
   render() {
-    const { headerLinks, docPaths } = this.props.config;
     return (
       <MakerTheme>
         <Navbar
-          headerLinks={ headerLinks }
-          docPaths={ docPaths }
+          navRoutes={ this.props.config.navRoutes }
         />
       </MakerTheme>
     );

@@ -1,6 +1,8 @@
 const React = require('react');
 const styled = require('styled-components').default;
-const { Box, Card } = require('@makerdao/ui-components-core');
+const { Box, Card, Link } = require('@makerdao/ui-components-core');
+
+var regex = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
 
 const DropdownTitle = styled.div`
 `;
@@ -30,17 +32,23 @@ class Dropdown extends React.Component {
     
   }
   render() {
-    const { label, routes } = this.props;
+    const { title, routes } = this.props;
     return (
       <>
         <DropdownContainer>
           <DropdownTitle>
-            {label}
+            { title }
           </DropdownTitle>
           <DropdownList>
             {routes.map(
-              (item, index) =>
-                  <DropdownListItem key={index}>{item.label}</DropdownListItem>
+              ({ label, url }, index) =>
+                  <DropdownListItem key={index}>
+                    { 
+                      !regex.test(url) 
+                      ? <Link href={url}>{label}</Link>
+                      : <Link href={url} target="_blank">{label}</Link>
+                    }
+                  </DropdownListItem>
             )}
           </DropdownList>
         </DropdownContainer>

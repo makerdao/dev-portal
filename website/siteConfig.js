@@ -3,6 +3,20 @@ const ServerStyleSheet = require('styled-components').ServerStyleSheet
 const renderToStaticMarkup = require('react-dom/server').renderToStaticMarkup
 const fs = require('fs');
 
+const buildNavRoutesFromSidebar = (rootKey) => {
+  const docPaths = JSON.parse(fs.readFileSync('sidebars.json'));
+  if (docPaths[rootKey] === undefined) return null;
+
+  return Object.keys(docPaths[rootKey])
+        .reduce((acc, label) => {
+          acc.push({ 
+            label,
+            url: `/docs/${docPaths[rootKey][label][0]}`,
+          });
+          return acc;
+        }, []);  
+}
+
 const users = [
   {
     caption: 'Maker',
@@ -19,20 +33,44 @@ const siteConfig = {
   baseUrl: '/',
   projectName: 'Maker DevPortal',
   organizationName: 'facebook',
-  headerLinks: [
-    {doc: 'getting-started/introduction', label: 'Docs'},
-    {doc: 'learn/introduction', label: 'Learn'},
-    {page: 'help', label: 'Products'},
-    {href: 'https://blog.makerdao.com/', label: 'Community'}
+  headerLinks: [],
+  navRoutes: [
+    { 
+      title: 'Docs',
+      routes: [
+        ...buildNavRoutesFromSidebar('docs'),
+      ] },
+    { 
+      title: 'Education',
+      routes: [
+        ...buildNavRoutesFromSidebar('education'),
+        { label: 'Playground', url: '/playground' }
+      ]},
+    {
+      title: 'Products', 
+      routes: [
+        { label: 'Development', url: 'https://cdp.makerdao.com/' },
+        { label: 'Design', url: 'https://makerdao.com/ui-components/' },
+        { label: 'Product Showcase', url: '/showcase' }
+      ]
+    },
+    {
+      title: 'Community',
+      routes: [
+        ...buildNavRoutesFromSidebar('community'),
+        { label: 'Blog', url: '/blog' },
+        { label: 'Bug Bounty', url: 'https://gitcoin.co/explorer' }
+      ]
+      
+    }
   ],
-  docPaths: JSON.parse(fs.readFileSync('sidebars.json')),
   users,
   headerIcon: 'img/maker.svg',
   footerIcon: 'img/maker.svg',
   favicon: 'img/favicon.png',
   colors: {
-    primaryColor: heading,
-    secondaryColor: makerOrange,
+    primaryColor: '#33E332',
+    secondaryColor: '#187DA4'
   },
   copyright: `Copyright © ${new Date().getFullYear()} MakerDAO`,
   highlight: {
