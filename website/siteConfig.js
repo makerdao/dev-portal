@@ -30,7 +30,7 @@ const siteConfig = {
   title: 'MakerDAO Developer Portal',
   tagline: 'Live free or Dai hard!',
   url: 'https://makerdao.com/',
-  baseUrl: '/',
+  baseUrl: '/dev-portal',
   projectName: 'dev-portal',
   organizationName: 'makerdao',
   headerLinks: [],
