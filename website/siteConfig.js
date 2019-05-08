@@ -29,10 +29,10 @@ const users = [
 const siteConfig = {
   title: 'MakerDAO Developer Portal',
   tagline: 'Live free or Dai hard!',
-  url: 'https://developers.makerdao.com',
-  baseUrl: '/',
-  projectName: 'Maker DevPortal',
-  organizationName: 'facebook',
+  url: 'https://makerdao.com/',
+  baseUrl: '/dev-portal/',
+  projectName: 'dev-portal',
+  organizationName: 'makerdao',
   headerLinks: [],
   navRoutes: [
     { 

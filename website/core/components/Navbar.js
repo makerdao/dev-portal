@@ -26,7 +26,7 @@ class Navbar extends React.Component {
         <Flex
           p='2rem 2.5rem 1.4rem 2.5rem'
           maxWidth='1140px'
-          m= '0 auto'
+          m='0 auto'
           justifyContent='space-between'
           align-items='center'
         >
