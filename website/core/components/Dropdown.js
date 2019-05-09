@@ -8,7 +8,6 @@ const DropdownTitle = styled.div`
 `;
 
 const DropdownContainer = styled.div`
-  border: 1px solid black
   cursor: pointer;
   margin: -25px;
   padding: 25px;
@@ -49,7 +48,7 @@ class Dropdown extends React.Component {
     
   }
   render() {
-    const { title, routes } = this.props;
+    const { title, routes, baseUrl } = this.props;
     return (
       <>
         <DropdownContainer>
@@ -63,7 +62,7 @@ class Dropdown extends React.Component {
                     { 
                       !regex.test(url) 
                       ? <Link href={url}>
-                          <Text.p>{label}</Text.p>
+                          <Text fontSize='1.0rem' fontWeight='bold'>{label}</Text>
                         </Link>
                       : <Link href={url} target="_blank">{label}</Link>
                     }

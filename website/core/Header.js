@@ -8,6 +8,7 @@ class Header extends React.Component {
     return (
       <MakerTheme>
         <Navbar
+          baseUrl={ this.props.config.baseUrl }
           navRoutes={ this.props.config.navRoutes }
         />
       </MakerTheme>

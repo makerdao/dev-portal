@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "Makerdao Developer Portal",
+  "alias": "mkr-dev-portal-staging",
+  "builds": [
+    { "src": "./website/package.json", "use": "@now/static-build", "config": { "distDir": "./build/dev-portal" } }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/website/$1" }
+  ]
+}

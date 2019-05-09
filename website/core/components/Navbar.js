@@ -1,10 +1,10 @@
 const React = require('react');
-const { Box, Flex } = require('@makerdao/ui-components-core');
+const { Box, Flex, Link } = require('@makerdao/ui-components-core');
 const Dropdown = require('./Dropdown');
 
-const Logo = () => (
-  <a href="/">
-    <img src={'/img/makerLogo.svg'}/>
+const Logo = ({ baseUrl }) => (
+  <a href={baseUrl}>
+    <img src={`/img/makerLogo.svg`}/>
   </a>
 );
 
@@ -17,7 +17,7 @@ class Navbar extends React.Component {
     }
   }
   render() {
-    const { navRoutes } = this.props;
+    const { baseUrl, navRoutes } = this.props;
     return (
       <Box
         width='100%'
@@ -30,7 +30,7 @@ class Navbar extends React.Component {
           justifyContent='space-between'
           align-items='center'
         >
-          <Logo/>
+          <Logo baseUrl={ baseUrl }/>
           <Box display={this.state.mobileMenuOpen ? "none" : "flex"}>
             { navRoutes.map(item => 
                             <Box 
@@ -38,6 +38,7 @@ class Navbar extends React.Component {
                               key={item.label} 
                               display={["none", "none", "block"]}>
                               <Dropdown
+                                baseUrl={ baseUrl }
                                 { ...item }
                               />
                             </Box>
