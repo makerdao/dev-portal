@@ -16,8 +16,12 @@ const mv = (src, dst) => new Promise((resolve, reject) => {
   _fs.default.rename(src, dst, err => err ? reject(err) : resolve());
 });
 
-const cat = (path, encoder) => new Promise((resolve, reject) => {
-  _fs.default.readFile(path, (err, file) => err ? reject(err) : resolve(encoder(file)));
+const cat = (path, encoding = 'utf8', parser = f => f) => new Promise((resolve, reject) => {
+  _fs.default.readFile(path, encoding, (err, file) => err ? reject(err) : resolve(parser(file)));
+});
+
+const exists = path => new Promise(resolve => {
+  _fs.default.access(path, _fs.default.constants.F_OK, err => err ? resolve(false) : resolve(true));
 });
 
 const mkTmpDir = () => new Promise((resolve, reject) => {
@@ -33,40 +37,52 @@ const mkTmpDir = () => new Promise((resolve, reject) => {
   });
 });
 
-const cloneAllProjects = (list, path) => Promise.all(list.reduce((acc, entry) => {
+const cloneAllWikis = (list, path) => Promise.all(list.reduce((acc, entry) => {
   if (!entry.active) return acc;
   return [new Promise(async resolve => {
     await (0, _promise.default)(path).clone(`https://github.com/makerdao/${entry.name}.wiki.git`);
     await mv(`${path}/${entry.name}.wiki`, `${path}/${entry.name}`);
     resolve();
   }), ...acc];
-}, [])); // const tmpObj = tmp.dirSync();
-// const dir = tmpObj.name;
-// const whiteList = JSON.parse(fs.readFileSync('./scripts/whiteList.json'));
-// const projectUrl = ({ name }) => y`;
-// const cloneAllProjects = ({ list }) => {
-//   list.map(project => {
-//     console.log(project);
-//     if (project.active) {
-//       git.clone(projectUrl({ name: project.name }))
-//     }
-//   })
-// }
-// cloneAllProjects({
-//   list: whiteList
-// });
-// tmpObj.removeCallback();
-//const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+}, []));
 
+const parseSidebar = async wiki => {
+  const sidebar = `${wiki}/_Sidebar.md`;
+  let xkey;
+  return (await cat(sidebar)).replace(new RegExp('1. ', 'g'), '').split('\n').filter(el => el !== '').reduce((acc, item) => {
+    const firstChar = item.charAt(0);
+
+    switch (firstChar) {
+      case '#':
+        xkey = item.split('#').pop().trim();
+        return { ...acc,
+          [xkey]: []
+        };
+
+      case '[':
+        const id = item.match(/\[.+?\]/g)[0].slice(1, -1);
+        const file = `${item.match(/\(.+?\)/g)[0].slice(1, -1).split('/').pop()}.md`;
+        acc[xkey].push({
+          id,
+          file
+        });
+        return acc;
+
+      default:
+        return acc;
+    }
+  }, {});
+};
 
 async function main() {
   const {
     path
   } = await mkTmpDir();
-  const whiteList = await cat('./scripts/whiteList.json', JSON.parse);
-  await cloneAllProjects(whiteList, path);
+  const whiteList = await cat('./scripts/whiteList.json', null, JSON.parse);
   console.log(whiteList);
-  console.log((await ls(path)));
+  await cloneAllWikis(whiteList, path);
+  const structure = await parseSidebar(`${path}/dai.js`);
+  console.log(JSON.stringify(structure, null, 2));
 }
 
 ;

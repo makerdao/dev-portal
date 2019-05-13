@@ -11,11 +11,17 @@
       "smart-contracts/sc_oracles",
       "smart-contracts/sc_mkr",
       "smart-contracts/sc_governance",
-      "smart-contracts/sc_rates"
+      "smart-contracts/sc_rates",
+      {
+        "type": "subcategory",
+        "label": "my new subcategory",
+        "ids": [
+          "smart-contracts/sc_core"
+        ]
+      }
     ],
     "Dai.js": [
-      "dai/Basic/cdp",
-      "dai/Basic/Maker"
+      "dai/Basic/cdp"
     ]
   },
   "education": {

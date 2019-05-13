@@ -5,16 +5,19 @@ const fs = require('fs');
 
 const buildNavRoutesFromSidebar = (rootKey) => {
   const docPaths = JSON.parse(fs.readFileSync('sidebars.json'));
-  if (docPaths[rootKey] === undefined) return null;
+  if (docPaths[rootKey] === undefined) return null
 
-  return Object.keys(docPaths[rootKey])
-        .reduce((acc, label) => {
-          acc.push({ 
-            label,
-            url: `/docs/${docPaths[rootKey][label][0]}`,
-          });
-          return acc;
-        }, []);  
+  return (
+    Object
+      .keys(docPaths[rootKey])
+      .reduce((acc, label) => {
+        acc.push({
+          label,
+          url: `/docs/${docPaths[rootKey][label][0]}`,
+        });
+        return acc
+      }, [])
+  )
 }
 
 const users = [
@@ -34,6 +37,7 @@ const siteConfig = {
   projectName: 'dev-portal',
   organizationName: 'makerdao',
   headerLinks: [],
+
   navRoutes: [
     { 
       title: 'Docs',
@@ -61,9 +65,9 @@ const siteConfig = {
         { label: 'Blog', url: '/blog' },
         { label: 'Bug Bounty', url: 'https://gitcoin.co/explorer' }
       ]
-      
     }
   ],
+  
   users,
   headerIcon: 'img/maker.svg',
   footerIcon: 'img/maker.svg',

@@ -1,5 +1,5 @@
 Arguments: 
-  /home/sirrom/.nvm/versions/node/v10.15.3/bin/node /home/sirrom/.yarn/bin/yarn.js
+  /home/sirrom/.nvm/versions/node/v10.15.3/bin/node /home/sirrom/.yarn/bin/yarn.js build-content
 
 PATH: 
   /home/sirrom/.rbenv/shims:/home/sirrom/.rbenv/bin:/home/sirrom/.yarn/bin:/home/sirrom/bin:/home/sirrom/.config/yarn/global/node_modules/.bin:/home/sirrom/bin:/home/sirrom/.nix-profile/bin:/home/sirrom/.local/bin:/home/sirrom/.nix-profile/bin:/home/sirrom/.nvm/versions/node/v10.15.3/bin:/home/sirrom/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
@@ -14,12 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  SyntaxError: /home/sirrom/work/makerdao/code/dev-portal/website/package.json: Unexpected token } in JSON at position 620
-      at JSON.parse (<anonymous>)
-      at /home/sirrom/.yarn/lib/cli.js:1625:59
-      at Generator.next (<anonymous>)
-      at step (/home/sirrom/.yarn/lib/cli.js:304:30)
-      at /home/sirrom/.yarn/lib/cli.js:315:13
+  Error: EACCES: permission denied, mkdir '/tmp/yarn--1557499974708-0.9648272534482465'
 
 npm manifest: 
   {
@@ -38,7 +33,7 @@ npm manifest:
       "@babel/cli": "^7.4.4",
       "@babel/core": "^7.4.4",
       "@babel/preset-env": "^7.4.4",
-      "@makerdao/docusaurus": "^1.9.2",
+      "@makerdao/docusaurus": "^1.9.2"
     },
     "dependencies": {
       "@makerdao/ui-components-core": "^0.2.1",
@@ -1193,16 +1188,7 @@ Lockfile:
       esutils "^2.0.2"
       js-tokens "^3.0.2"
   
-  babel-polyfill@^6.26.0:
-    version "6.26.0"
-    resolved "https://registry.npmjs.org/babel-polyfill/-/babel-polyfill-6.26.0.tgz#379937abc67d7895970adc621f284cd966cf2153"
-    integrity sha1-N5k3q8Z9eJWXCtxiHyhM2WbPIVM=
-    dependencies:
-      babel-runtime "^6.26.0"
-      core-js "^2.5.0"
-      regenerator-runtime "^0.10.5"
-  
-  babel-runtime@6.x.x, babel-runtime@^6.26.0:
+  babel-runtime@6.x.x:
     version "6.26.0"
     resolved "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
     integrity sha1-llxwWGaOgrVde/4E/yM3vItWR/4=
@@ -1869,7 +1855,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
     integrity sha1-ZSKUwUZR2yj6k70tX/KYOk8IxjY=
   
-  core-js@^2.4.0, core-js@^2.5.0, core-js@^2.6.5:
+  core-js@^2.4.0, core-js@^2.6.5:
     version "2.6.5"
     resolved "https://registry.npmjs.org/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
     integrity sha512-klh/kDpwX8hryYL14M9w/xei6vrv6sE8gTHDG7/T/+SEovB/G4ejwcfE/CBzO6Edsu+OETZMZ3wcX/EjUkrl5A==
@@ -5440,11 +5426,6 @@ Lockfile:
     version "1.4.0"
     resolved "https://registry.npmjs.org/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
     integrity sha512-1G6jJVDWrt0rK99kBjvEtziZNCICAuvIPkSiUFIQxVP06RCVpq3dmDo2oi6ABpYaDYaTRr67BEhL8r1wgEZZKg==
-  
-  regenerator-runtime@^0.10.5:
-    version "0.10.5"
-    resolved "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
-    integrity sha1-M2w+/BIgrc7dosn6tntaeVWjNlg=
   
   regenerator-runtime@^0.11.0:
     version "0.11.1"

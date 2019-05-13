@@ -10,8 +10,12 @@ const mv = (src, dst) => new Promise((resolve, reject) => {
   fs.rename(src, dst, (err) => err ? reject(err) : resolve());
 });
 
-const cat = (path, encoder) => new Promise((resolve, reject) => {
-  fs.readFile(path, (err, file) => err ? reject(err) : resolve(encoder(file)));
+const cat = (path, encoding='utf8', parser = (f) => f) => new Promise((resolve, reject) => {
+  fs.readFile(path, encoding, (err, file) => err ? reject(err) : resolve(parser(file)));
+});
+
+const exists = (path) => new Promise(resolve => {
+  fs.access(path, fs.constants.F_OK, (err) => err ? resolve(false) : resolve(true)); 
 });
 
 const mkTmpDir = () => new Promise((resolve, reject) => {
@@ -27,7 +31,7 @@ const mkTmpDir = () => new Promise((resolve, reject) => {
   });
 });
 
-const cloneAllProjects = (list, path) => Promise.all(
+const cloneAllWikis = (list, path) => Promise.all(
   list.reduce((acc, entry) => {
     if (!entry.active) return acc;
     return [
@@ -41,12 +45,40 @@ const cloneAllProjects = (list, path) => Promise.all(
   }, [])
 );
 
+const parseSidebar = async wiki => {
+  const sidebar = `${wiki}/_Sidebar.md`;
+  let xkey;
+  return (await cat(sidebar))
+    .replace(new RegExp('1. ', 'g'), '')
+    .split('\n')
+    .filter(el => el !== '')
+    .reduce((acc, item) => {
+      const firstChar = item.charAt(0);
+      switch (firstChar) {
+      case '#':
+        xkey = item.split('#').pop().trim();
+        return {
+          ...acc,
+          [ xkey ]: [],
+        }
+      case '[':
+        const id = item.match(/\[.+?\]/g)[0].slice(1, -1);
+        const file = `${item.match(/\(.+?\)/g)[0].slice(1, -1).split('/').pop()}.md`;
+        acc[xkey].push({ id, file });
+        return acc;
+      default:
+        return acc;
+      }
+    }, {})
+}
+
 async function main() {
   const { path } = await mkTmpDir();
-  const whiteList = await cat('./scripts/whiteList.json', JSON.parse);
-  await cloneAllProjects(whiteList, path);
-  console.log(whiteList);
-  console.log(await ls(path)) 
+  const whiteList = await cat('./scripts/whiteList.json', null, JSON.parse);
+  console.log(whiteList)
+  await cloneAllWikis(whiteList, path);
+  const structure = await parseSidebar(`${path}/dai.js`);
+  console.log(JSON.stringify(structure, null, 2));
 };
 
 main();
