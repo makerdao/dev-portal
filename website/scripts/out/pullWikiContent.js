@@ -1,97 +1,72 @@
 "use strict";
 
-var _fs = _interopRequireDefault(require("fs"));
-
-var _tmp = _interopRequireDefault(require("tmp"));
-
 var _promise = _interopRequireDefault(require("simple-git/promise"));
 
-var _mv = _interopRequireDefault(require("mv"));
+var _path = _interopRequireDefault(require("path"));
 
-var _ncp = require("ncp");
+var _debug = _interopRequireDefault(require("debug"));
 
-var _rimraf = _interopRequireDefault(require("rimraf"));
+var _cliCommands = require("./cliCommands");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_ncp.ncp.limit = 16;
+const log = (0, _debug.default)('log:build');
 
-const ls = (path = './') => new Promise((resolve, reject) => {
-  _fs.default.readdir(path, (err, files) => err ? reject(err) : resolve(files));
-});
+const removeFilesUnderPath = async ({
+  route
+}) => {
+  const files = await (0, _cliCommands.ls)(route);
+  return Promise.all(files.map(f => (0, _cliCommands.rm)(_path.default.join(route, f))));
+};
 
-const cat = (path, encoding = 'utf8', parser = f => f) => new Promise((resolve, reject) => {
-  _fs.default.readFile(path, encoding, (err, file) => err ? reject(err) : resolve(parser(file)));
-});
+const transferWikiFiles = async ({
+  src,
+  dst,
+  files,
+  wiki
+}) => {
+  const wikiDstDir = _path.default.join(dst, wiki.group, wiki.name);
 
-const mv = (src, dst) => new Promise((resolve, reject) => {
-  (0, _mv.default)(src, dst, err => err ? reject(err) : resolve());
-});
-
-const cp = (src, dst) => new Promise((resolve, reject) => {
-  (0, _ncp.ncp)(src, dst, err => err ? reject(err) : resolve());
-});
-
-const exists = path => new Promise(resolve => {
-  _fs.default.access(path, _fs.default.constants.F_OK, err => err ? resolve(false) : resolve(true));
-});
-
-const rm = path => new Promise((resolve, reject) => {
-  (0, _rimraf.default)(path, [], err => err ? reject(err) : resolve());
-});
-
-const mkdir = path => new Promise(async (resolve, reject) => {
-  if (!(await exists(path))) {
-    _fs.default.mkdir(path, err => err ? reject(err) : resolve());
+  if (!(await (0, _cliCommands.exists)(wikiDstDir))) {
+    await (0, _cliCommands.mkdir)(wikiDstDir);
   }
 
-  resolve();
-});
+  return Promise.all(files.map(file => (0, _cliCommands.cp)({
+    src: _path.default.join(src, wiki.name, file.name),
+    dst: _path.default.join(dst, wiki.group, wiki.name, file.name)
+  })));
+};
 
-const appendToStart = (content, path) => new Promise(async (resolve, reject) => {
-  const oldData = Buffer.from((await cat(path)));
-
-  _fs.default.open(path, 'w+', (err, fd) => {
-    if (err) reject(err);
-    const newData = Buffer.from(content);
-
-    _fs.default.write(fd, newData, 0, newData.length, 0, err => {
-      if (err) reject(err);
-
-      _fs.default.write(fd, oldData, 0, oldData.length, newData.length, err => {
-        if (err) reject(err);
-        resolve();
-      });
+const retrieveWiki = ({
+  wiki,
+  route
+}) => new Promise(resolve => {
+  if (!wiki.active) {
+    resolve(null);
+  } else {
+    (0, _promise.default)(route).clone(`https://github.com/makerdao/${wiki.name}.wiki.git`).then(() => (0, _cliCommands.mv)(`${route}/${wiki.name}.wiki`, `${route}/${wiki.name}`)).then(() => {
+      log(`${wiki.label} cloned to ${route}`);
+      resolve();
     });
-  });
+  }
 });
 
-const mkTmpDir = () => new Promise((resolve, reject) => {
-  _tmp.default.dir((err, path, cleanUpCallback) => {
-    if (err) reject(err);
-    resolve({
-      path,
-      clean: () => {
-        console.log('cleaning');
-      }
-    });
-  });
-});
+const yamlifyWiki = ({
+  files,
+  route,
+  wiki
+}) => Promise.all(files.map(file => (0, _cliCommands.appendToStart)({
+  content: `---\nid: ${file.id}\ntitle: ${file.title}\nsidebar_label: ${file.title}\n---\n`,
+  route: _path.default.join(route, wiki.name, file.name)
+})));
 
-const cloneAllWikis = (list, path) => Promise.all(list.reduce((acc, entry) => {
-  if (!entry.active) return acc;
-  return [(0, _promise.default)(path).clone(`https://github.com/makerdao/${entry.name}.wiki.git`).then(() => mv(`${path}/${entry.name}.wiki`, `${path}/${entry.name}`)), ...acc];
-}, []));
-
-const addYmlToFiles = (list, tmpPath, project) => Promise.all(list.reduce((acc, entry) => {
-  const content = `---\nid: ${entry.id}\ntitle: ${entry.title}\nsidebar_label: ${entry.title}\n---\n`;
-  return [appendToStart(content, `${tmpPath}/${project}/${entry.id}.md`), ...acc];
-}, []));
-
-const parseSidebar = async (path, project) => {
-  const sidebar = `${path}/${project}/_Sidebar.md`;
+const parseWiki = async ({
+  name,
+  route
+}) => {
+  const sidebar = `${route}/${name}/_Sidebar.md`;
   let xkey;
-  return (await cat(sidebar)).replace(new RegExp('1. ', 'g'), '').split('\n').filter(el => el !== '').reduce((acc, item) => {
+  return (await (0, _cliCommands.cat)(sidebar)).replace(new RegExp('1. ', 'g'), '').split('\n').filter(el => el !== '').reduce((acc, item) => {
     const firstChar = item.charAt(0);
 
     switch (firstChar) {
@@ -104,9 +79,11 @@ const parseSidebar = async (path, project) => {
       case '[':
         const title = item.match(/\[.+?\]/g)[0].slice(1, -1);
         const id = `${item.match(/\(.+?\)/g)[0].slice(1, -1).split('/').pop()}`;
+        const name = `${id}.md`;
         acc[xkey].push({
           title,
-          id
+          id,
+          name
         });
         return acc;
 
@@ -116,37 +93,76 @@ const parseSidebar = async (path, project) => {
   }, {});
 };
 
-const transferFiles = async (src, dst, project, sources) => {
-  await mkdir(`${dst}/${project}`);
-  return Promise.all(sources.reduce((acc, entry) => [cp(`${src}/${project}/${entry.id}.md`, `${dst}/${project}/${entry.id}.md`)]));
+const genWikiSidebar = ({
+  name,
+  group,
+  category,
+  subcategories
+}) => ({
+  [category]: Object.keys(subcategories).map(subcategory => ({
+    "type": "subcategory",
+    "label": subcategory,
+    "ids": subcategories[subcategory].map(elem => _path.default.join(group, name, elem.id))
+  }))
+});
+
+const runWikiSetup = async ({
+  wiki,
+  dirs
+}) => {
+  await retrieveWiki({
+    wiki,
+    route: dirs.tmp
+  });
+  const wikiOrder = await parseWiki({
+    name: wiki.name,
+    route: dirs.tmp
+  });
+  const files = [].concat(...Object.values(wikiOrder));
+  await yamlifyWiki({
+    files,
+    route: dirs.tmp,
+    wiki
+  });
+  await transferWikiFiles({
+    src: dirs.tmp,
+    dst: dirs.docs,
+    files,
+    wiki
+  });
+  return genWikiSidebar({
+    name: wiki.name,
+    group: wiki.group,
+    category: wiki.label,
+    subcategories: wikiOrder
+  });
 };
 
+const retrieveDirectories = async () => ({
+  'pwd': process.cwd(),
+  'docs': _path.default.normalize(`${process.cwd()}/../docs`),
+  'img': `${process.cwd()}/static/img`,
+  'tmp': await (0, _cliCommands.mkTmpDir)()
+});
+
+const retrieveFiles = async () => ({
+  'whiteList': await (0, _cliCommands.cat)('./whiteList.json', null, JSON.parse),
+  'sidebars': await (0, _cliCommands.cat)('./sidebars.json', null, JSON.parse),
+  'nav': await (0, _cliCommands.cat)('./nav.json', null, JSON.parse)
+});
+
 const main = async () => {
-  const docsPath = `${`${process.cwd()}`.split('/').slice(0, -1).join('/')}/docs/projects`;
-  const {
-    path: tmpPath
-  } = await mkTmpDir();
-  const whiteList = await cat('./scripts/whiteList.json', null, JSON.parse);
-  await cloneAllWikis(whiteList, tmpPath);
-  const structure = await parseSidebar(tmpPath, 'dai.js');
-  console.log(JSON.stringify(structure, null, 2));
-  const sources = [].concat(...Object.values(structure));
-  await addYmlToFiles(sources, tmpPath, 'dai.js');
-  const oldProjects = await ls(docsPath);
-  await Promise.all(oldProjects.reduce((acc, folder) => [rm(`${docsPath}/${folder}`), ...acc], []));
-  await transferFiles(tmpPath, docsPath, 'dai.js', sources);
-  const {
-    oldDocsStructure,
-    ...rest
-  } = JSON.parse((await cat('./sidebars.json')));
-  const docs = {
-    'Dai.js': Object.keys(structure).reduceRight((acc, name) => [{
-      "type": "subcategory",
-      "label": name,
-      "ids": structure[name].map(elem => elem.id)
-    }, ...acc], [])
-  };
-  console.log(JSON.stringify(docs, null, 2));
+  const dirs = await retrieveDirectories();
+  const files = await retrieveFiles(); // will remove all files under docs whenscript is better visualised
+
+  await removeFilesUnderPath({
+    route: _path.default.join(dirs.docs, 'projects')
+  });
+  const res = await Promise.all(files.whiteList.map(wiki => runWikiSetup({
+    wiki,
+    dirs
+  })));
+  log(JSON.stringify(res, null, 4));
 };
 
 main();

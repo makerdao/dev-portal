@@ -7,7 +7,7 @@
     "write-translations": "docusaurus-write-translations",
     "version": "docusaurus-version",
     "rename-version": "docusaurus-rename-version",
-    "build-content": "babel ./scripts/pullWikiContent.js -d scripts/out && node ./scripts/out/pullWikiContent.js",
+    "build-content": "babel ./scripts/*.js -d scripts/out && node ./scripts/out/getDocs.js",
     "now-build": "yarn build"
   },
   "devDependencies": {
@@ -20,6 +20,7 @@
     "@makerdao/ui-components-core": "^0.2.1",
     "@makerdao/ui-components-footer": "^0.1.8",
     "copyfiles": "^2.1.0",
+    "debug": "^4.1.1",
     "mv": "^2.1.1",
     "ncp": "^2.0.0",
     "rimraf": "^2.6.3",
